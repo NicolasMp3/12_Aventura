@@ -1,8 +1,7 @@
 let nomeViajante = prompt("Qual o nome do(a) viajante?");
 let dia = 4;
 let energia = 100;
-let distancia = 500;  // Distância total até a capital
-let ferramentas = 3;
+let distancia = 350;  // Distância total até a capital
 let comida = 50;  // Começando com 50 pontos de comida
 let dinheiro = 100;  // Começando com 100 de dinheiro
 let diaExecucao = 15;
@@ -10,7 +9,7 @@ let vivo = true;
 let vida = 100;  // Atributo de vida adicionado
 
 function introduzirHistoria() {
-    console.log(`Hoje é o quarto dia do mês. Você acaba de receber a terrível notícia de que seu irmão foi condenado à forca na capital. A execução está marcada para o dia ${diaExecucao}, o que significa que você tem apenas ${diaExecucao - dia} dias para percorrer os 500 quilômetros até lá e tentar salvá-lo. A estrada é longa e perigosa. O que você fará agora?`);
+    console.log(`Hoje é o quarto dia do mês. Você acaba de receber a terrível notícia de que seu irmão foi condenado à forca na capital. A execução está marcada para o dia ${diaExecucao}, o que significa que você tem apenas ${diaExecucao - dia} dias para percorrer os ${distancia} quilômetros até lá e tentar salvá-lo. A estrada é longa e perigosa. O que você fará agora?`);
 }
 
 function exibirStatus() {
@@ -18,8 +17,9 @@ function exibirStatus() {
     console.log(`Dia: ${dia}`);
     console.log(`Distância restante: ${distancia} km`);
     console.log(`Energia: ${energia}`);
-    console.log(`Comida: ${comida}`);  // Exibindo o status de comida
-    console.log(`Dinheiro: R$${dinheiro}`);  // Exibindo o status de dinheiro
+    console.log(`Comida: ${comida}`);
+    console.log(`Dinheiro: R$${dinheiro}`);
+    console.log(`Vida: ${vida}`);  // Exibindo o status de vida
     console.log(`Dias até a execução: ${diaExecucao - dia}`);
     console.log(`========================================`);
 }
@@ -75,7 +75,6 @@ function seguirCaminho() {
     let distanciaPercorrida = 40;  // Aumentar a distância percorrida por dia
     distancia -= distanciaPercorrida;
     energia -= 10;  // Perde energia ao seguir caminho
-    comida--;  // Reduzindo comida a cada movimento
     alert("Você seguiu seu caminho normalmente.");
     if (Math.random() < 0.3) {
         eventoBandidos();
@@ -113,25 +112,35 @@ function comer() {
     }
 }
 
+function pescar() {
+    let peixes = Math.floor(Math.random() * 5) + 1; // Pesca de 1 a 5 peixes
+    let dificuldade = 0.2 * peixes; // Aumenta a dificuldade
+    if (Math.random() < dificuldade) {
+        alert(`Você conseguiu pescar ${peixes} peixe(s)!`);
+        comida += peixes * 5; // Cada peixe equivale a 5 pontos de comida
+    } else {
+        alert("Você não conseguiu pescar nada.");
+    }
+}
+
 function avancarDia() {
     introduzirHistoria();  // Exibir a história apenas uma vez no início
     
     while (vivo && distancia > 0 && dia < diaExecucao) {
         exibirStatus();
         
-        // Reduzindo a comida a cada dia
-        comida -= 5; 
-
-        let acao = prompt("O que você deseja fazer? (seguir/correr/descansar/comer)");
+        let acao = prompt("O que você deseja fazer? \n(1) Seguir\n(2) Correr\n(3) Descansar\n(4) Comer\n(5) Pescar");
         
-        if (acao.toLowerCase() === "seguir") {
+        if (acao === "1" || acao.toLowerCase() === "seguir") {
             seguirCaminho();
-        } else if (acao.toLowerCase() === "correr") {
+        } else if (acao === "2" || acao.toLowerCase() === "correr") {
             correr();
-        } else if (acao.toLowerCase() === "descansar") {
+        } else if (acao === "3" || acao.toLowerCase() === "descansar") {
             descansar();
-        } else if (acao.toLowerCase() === "comer") {
+        } else if (acao === "4" || acao.toLowerCase() === "comer") {
             comer();
+        } else if (acao === "5" || acao.toLowerCase() === "pescar") {
+            pescar();
         } else {
             alert("Ação inválida, tente novamente.");
             continue;
@@ -150,8 +159,8 @@ function avancarDia() {
         }
         
         if (comida <= 0) {
-            energia -= 10;  // Reduz energia se a comida acabar
-            alert("Você ficou sem comida e perdeu 10 de energia!");
+            energia -= 5;  // Reduz energia se a comida acabar
+            alert("Você ficou sem comida e perdeu 5 de energia!");
         }
         
         if (energia <= 0) {
