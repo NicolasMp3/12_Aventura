@@ -4,7 +4,7 @@ let energia = 100;
 let distancia = 350;  // Distância total até a capital
 let comida = 50;  // Começando com 50 pontos de comida
 let dinheiro = 100;  // Começando com 100 de dinheiro
-let diaExecucao = 15;
+let diaExecucao = 20;
 let vivo = true;
 let vida = 100;  // Atributo de vida adicionado
 
@@ -82,7 +82,7 @@ function seguirCaminho() {
 }
 
 function correr() {
-    let distanciaPercorrida = 60;  // Aumentar a distância percorrida ao correr
+    let distanciaPercorrida = 80;  // Aumentar a distância percorrida ao correr
     distancia -= distanciaPercorrida;
     energia -= 20;  // Perde energia ao correr
     alert("Você correu pelo caminho!");
