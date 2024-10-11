@@ -1,4 +1,3 @@
-let nomeViajante = prompt("Qual o nome do(a) viajante?");
 let dia = 4;
 let energia = 100;
 let distancia = 350;  // Distância total até a capital
@@ -7,9 +6,14 @@ let dinheiro = 100;  // Começando com 100 de dinheiro
 let diaExecucao = 20;
 let vivo = true;
 let vida = 100;  // Atributo de vida adicionado
+let nomeViajante = ""; // Inicializar vazio
+let historiaContada = false; // Flag para garantir que a história seja contada apenas uma vez
 
 function introduzirHistoria() {
-    console.log(`Hoje é o quarto dia do mês. Você acaba de receber a terrível notícia de que seu irmão foi condenado à forca na capital. A execução está marcada para o dia ${diaExecucao}, o que significa que você tem apenas ${diaExecucao - dia} dias para percorrer os ${distancia} quilômetros até lá e tentar salvá-lo. A estrada é longa e perigosa. O que você fará agora?`);
+    if (!historiaContada) {
+        console.log(`Hoje é o quarto dia do mês. Você acaba de receber a terrível notícia de que seu irmão foi condenado à forca na capital. A execução está marcada para o dia ${diaExecucao}, o que significa que você tem apenas ${diaExecucao - dia} dias para percorrer os ${distancia} quilômetros até lá e tentar salvá-lo. A estrada é longa e perigosa. O que você fará agora?`);
+        historiaContada = true;
+    }
 }
 
 function exibirStatus() {
@@ -102,24 +106,27 @@ function eventoComerciante() {
 function seguirCaminho() {
     let distanciaPercorrida = 40;  // Aumentar a distância percorrida por dia
     distancia -= distanciaPercorrida;
-    energia -= 10;  // Perde energia ao seguir caminho
+    energia = Math.max(energia - 10, 0);  // Perde energia ao seguir caminho, evitando valores negativos
     alert("Você seguiu seu caminho normalmente.");
     if (Math.random() < 0.3) {
         eventoBandidos();
+    }
+    if (Math.random() < 0.2) {
+        eventoComerciante();
     }
 }
 
 function correr() {
     let distanciaPercorrida = 80;  // Aumentar a distância percorrida ao correr
     distancia -= distanciaPercorrida;
-    energia -= 20;  // Perde energia ao correr
+    energia = Math.max(energia - 20, 0);  // Perde energia ao correr, evitando valores negativos
     alert("Você correu pelo caminho!");
-    
+
     if (Math.random() < 0.5) {
         comida = Math.max(comida - 1, 0);  // Perde comida com 50% de chance
         alert("Você perdeu uma comida enquanto corria!");
     }
-    
+
     if (Math.random() < 0.4) {
         eventoBandidos();
     }
@@ -132,10 +139,10 @@ function descansar() {
 
 function comer() {
     if (comida >= 5) {
-            energia = Math.min(energia + 20, 100);
-            comida -= 5;
-            alert("Você comeu e recuperou energia.");
-        } else {
+        energia = Math.min(energia + 20, 100);
+        comida -= 5;
+        alert("Você comeu e recuperou energia.");
+    } else {
         alert("Você não tem comida suficiente para comer!");
     }
 }
@@ -150,14 +157,13 @@ function pescar() {
         alert("Você não conseguiu pescar nada.");
     }
 }
-function start() {
+
+function avancarDia() {
     while (vivo && distancia > 0 && dia < diaExecucao) {
-        introduzirHistoria();  // Exibir a história apenas uma vez no início
-        avancarDia();  // Começar o loop do jogo
         exibirStatus();
-        
+
         let acao = prompt("O que você deseja fazer? \n(1) Seguir\n(2) Correr\n(3) Descansar\n(4) Comer\n(5) Pescar");
-        
+
         if (acao === "1" || acao.toLowerCase() === "seguir") {
             seguirCaminho();
         } else if (acao === "2" || acao.toLowerCase() === "correr") {
@@ -172,29 +178,29 @@ function start() {
             alert("Ação inválida, tente novamente.");
             continue;
         }
-        
+
         dia++;
-        
+
         if (distancia <= 0) {
             alert("Parabéns! Você chegou à capital e salvou seu irmão!");
             break;
         }
-        
+
         if (dia >= diaExecucao) {
             alert("Infelizmente, você não conseguiu chegar a tempo. Seu irmão foi executado...");
             vivo = false;
         }
-        
+
         if (comida <= 0) {
-            energia -= 5;  // Reduz energia se a comida acabar
+            energia = Math.max(energia - 5, 0);  // Reduz energia se a comida acabar, evitando valores negativos
             alert("Você ficou sem comida e perdeu 5 de energia!");
         }
-        
+
         if (energia <= 0) {
             alert("Você não tem mais energia para continuar sua jornada.");
             vivo = false;
         }
-        
+
         if (vida <= 0) {
             alert("Você morreu de ferimentos...");
             vivo = false;
@@ -204,4 +210,10 @@ function start() {
     if (!vivo) {
         alert("Fim de jogo. Você não conseguiu completar a jornada.");
     }
+}
+
+function start() {
+    nomeViajante = prompt("Qual o nome do(a) viajante?");
+    introduzirHistoria();  // Exibir a história apenas uma vez no início
+    avancarDia();  // Começar o loop do jogo
 }
