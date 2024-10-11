@@ -47,11 +47,21 @@ function combateBandidos(bandidos) {
         let dano;
 
         if (tipoAtaque.toLowerCase() === "forte") {
-            dano = Math.floor(Math.random() * 10) + 5;  // Dano entre 5 e 15
-            energia -= 20;
+            if (energia >= 20) {  // Verifica se há energia suficiente
+                dano = Math.floor(Math.random() * 10) + 5;  // Dano entre 5 e 15
+                energia -= 20;
+            } else {
+                alert("Você não tem energia suficiente para um ataque forte!");
+                continue;
+            }
         } else {
-            dano = Math.floor(Math.random() * 5) + 3;  // Dano entre 3 e 8
-            energia -= 10;
+            if (energia >= 10) {  // Verifica se há energia suficiente
+                dano = Math.floor(Math.random() * 5) + 3;  // Dano entre 3 e 8
+                energia -= 10;
+            } else {
+                alert("Você não tem energia suficiente para um ataque normal!");
+                continue;
+            }
         }
 
         vidaBandidos -= dano;
@@ -67,7 +77,7 @@ function combateBandidos(bandidos) {
     if (vida <= 0) {
         vivo = false;
         alert("Você morreu em combate...");
-    } else {
+    } else if (vidaBandidos <= 0) {
         dinheiro += bandidos * 10;  // Ganha 10 dinheiros por bandido derrotado
         alert(`Você derrotou os bandidos e ganhou R$${bandidos * 10}!`);
     }
@@ -140,10 +150,12 @@ function pescar() {
         alert("Você não conseguiu pescar nada.");
     }
 }
+function start() {
+    introduzirHistoria();  // Exibir a história apenas uma vez no início
+    avancarDia();  // Começar o loop do jogo
+}
 
 function avancarDia() {
-    introduzirHistoria();  // Exibir a história apenas uma vez no início
-    
     while (vivo && distancia > 0 && dia < diaExecucao) {
         exibirStatus();
         
@@ -196,6 +208,3 @@ function avancarDia() {
         alert("Fim de jogo. Você não conseguiu completar a jornada.");
     }
 }
-
-// Início do jogo
-avancarDia();
