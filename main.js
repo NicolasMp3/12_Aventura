@@ -151,12 +151,9 @@ function pescar() {
     }
 }
 function start() {
-    introduzirHistoria();  // Exibir a história apenas uma vez no início
-    avancarDia();  // Começar o loop do jogo
-}
-
-function avancarDia() {
     while (vivo && distancia > 0 && dia < diaExecucao) {
+        introduzirHistoria();  // Exibir a história apenas uma vez no início
+        avancarDia();  // Começar o loop do jogo
         exibirStatus();
         
         let acao = prompt("O que você deseja fazer? \n(1) Seguir\n(2) Correr\n(3) Descansar\n(4) Comer\n(5) Pescar");
