@@ -27,24 +27,25 @@ function exibirStatus() {
 function eventoBandidos() {
     let bandidos = Math.floor(Math.random() * 5) + 1; // Entre 1 e 5 bandidos
     alert(`Você encontrou ${bandidos} bandidos no caminho!`);
-    
+
     let acao = prompt("Você quer lutar ou ser roubado? (lutar/roubado)");
-    
+
     if (acao.toLowerCase() === "lutar") {
         combateBandidos(bandidos);
     } else {
-        dinheiro = Math.max(dinheiro - 1, 0);  // Roubo reduz dinheiro
-        alert("Você foi roubado! Perdeu dinheiro.");
+        let dinheiroRoubado = bandidos * 10;  // Cada bandido rouba 10 dinheiros
+        dinheiro = Math.max(dinheiro - dinheiroRoubado, 0);
+        alert(`Você foi roubado e perdeu R$${dinheiroRoubado}.`);
     }
 }
 
 function combateBandidos(bandidos) {
     let vidaBandidos = 15;
-    
+
     while (vidaBandidos > 0 && energia > 0 && vida > 0) {
         let tipoAtaque = prompt("Escolha seu ataque: normal (gasta 10 energia) ou forte (gasta 20 energia)?");
         let dano;
-        
+
         if (tipoAtaque.toLowerCase() === "forte") {
             dano = Math.floor(Math.random() * 10) + 5;  // Dano entre 5 e 15
             energia -= 20;
@@ -52,13 +53,13 @@ function combateBandidos(bandidos) {
             dano = Math.floor(Math.random() * 5) + 3;  // Dano entre 3 e 8
             energia -= 10;
         }
-        
+
         vidaBandidos -= dano;
         alert(`Você causou ${dano} de dano. A vida dos bandidos é agora ${vidaBandidos}.`);
-        
+
         if (vidaBandidos > 0) {
             let danoBandidos = Math.floor(Math.random() * 5) + 5;
-            vida -= danoBandidos;  // Bandidos causam dano à vida do jogador
+            vida -= danoBandidos;
             alert(`Os bandidos causaram ${danoBandidos} de dano. Sua vida é agora ${vida}.`);
         }
     }
@@ -67,7 +68,24 @@ function combateBandidos(bandidos) {
         vivo = false;
         alert("Você morreu em combate...");
     } else {
-        alert("Você derrotou os bandidos e sobreviveu!");
+        dinheiro += bandidos * 10;  // Ganha 10 dinheiros por bandido derrotado
+        alert(`Você derrotou os bandidos e ganhou R$${bandidos * 10}!`);
+    }
+}
+
+function eventoComerciante() {
+    let acao = prompt("Você encontrou um comerciante. Deseja comprar 5 pontos de comida por 20 dinheiros? (sim/nao)");
+
+    if (acao.toLowerCase() === "sim") {
+        if (dinheiro >= 20) {
+            comida += 5;
+            dinheiro -= 20;
+            alert("Você comprou 5 pontos de comida.");
+        } else {
+            alert("Você não tem dinheiro suficiente.");
+        }
+    } else {
+        alert("Você decidiu não comprar nada.");
     }
 }
 
@@ -103,11 +121,11 @@ function descansar() {
 }
 
 function comer() {
-    if (comida > 0) {
-        energia = Math.min(energia + 20, 100);  // Aumenta a energia ao comer
-        comida--;  // Reduzindo comida
-        alert("Você comeu e recuperou energia.");
-    } else {
+    if (comida >= 5) {
+            energia = Math.min(energia + 20, 100);
+            comida -= 5;
+            alert("Você comeu e recuperou energia.");
+        } else {
         alert("Você não tem comida suficiente para comer!");
     }
 }
